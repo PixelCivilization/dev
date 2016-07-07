@@ -1,0 +1,48 @@
+LOCK Code
+https://javascriptobfuscator.com/default.aspx
+https://github.com/mishoo/UglifyJS2
+
+https://firebase.google.com/
+
+https://codelabs.developers.google.com/
+
+COOL LIBS:
+https://github.com/mattcolman/phaser-list-view
+http://www.emanueleferonato.com/2016/01/20/phaser-tutorial-creation-of-a-html5-character-selection-screen-like-the-one-in-crossy-road-ios-smash-hit/
+
+
+TUTS:
+https://gamedevacademy.org/how-to-procedurally-generate-a-dungeon-in-phaser-part-1/?a=13
+
+
+
+http://www.emanueleferonato.com/2016/03/16/understanding-signal-dispatch-with-phaser/
+
+http://www.joshmorony.com/creating-animated-scoring-in-an-html5-phaser-game/
+
+https://gamedevacademy.org/phaser-tutorial-how-to-create-an-idle-clicker-game/
+
+http://bravebunny.co/blog/getting-a-phaser-game-on-steam-4-steamworks
+
+
+http://www.thebotanistgame.com/blog/2015/08/12/saving-loading-game-state-phaserjs.html
+
+http://phaser.io/news/2015/03/using-littera-with-phaser
+
+
+#Camera:
+https://gist.github.com/netcell/60097d0661ad2f74a258
+
+#Menu
+https://github.com/MattMcFarland/phaser-menu-system
+
+#Sizing
+http://sbcgamesdev.blogspot.com/2015/04/phaser-tutorial-manage-different-screen.html
+
+#Saving
+http://thoughts.amphibian.com/2016/03/using-shutdown-to-save-state-in-phaser.html
+    #Compression
+    http://pieroxy.net/blog/pages/lz-string/index.html
+
+#MoreLikeHTML5
+http://www.emanueleferonato.com/2015/10/06/give-your-html5-game-menu-a-nice-bounce-effect-with-phaser/
