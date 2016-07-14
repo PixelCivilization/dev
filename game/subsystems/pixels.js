@@ -12,9 +12,9 @@ function pixelsGroupsProcedureCheck(checkGroup) {
 
 function pixelsSpawner() {
     //spawn new Pixel if new house created or 10% of homeCap
-    if(getAllPixels() < homeCap || (getAllPixels() - homeCap) < homeCap*0.1)
+    if(getAllPixels() < resources.homeCap || (getAllPixels() - resources.homeCap) < resources.homeCap*0.1)
     {
-        myPixelsCount++;
+        stats.pixelsSpawned++;
         var tempPixel = createPixel();
         writeLog(tempPixel.name + " has appear!");
     }
@@ -25,7 +25,8 @@ function createPixel() {
     
     
     var tempPixel = unemployedPixelsGroup.create(spawnPoint.x-10+game.rnd.integerInRange(1,28), spawnPoint.y+10, 'blkPix');
-        tempPixel.name = 'Pixel#' + myPixelsCount;
+        tempPixel.id = stats.pixelsSpawned;
+        tempPixel.name = 'Pixel#' + stats.pixelsSpawned;
         tempPixel.workRoutine = 0;
         tempPixel.wanderCount = 0;
         tempPixel.capWasFull = false;
@@ -69,7 +70,7 @@ function nextPixelTween(tempPix) {
         switch(tempPix.workRoutine) {
             case 0:
                     
-//console.log(tempPix.name+" is going to random storage (0)");
+console.log(tempPix.name+" is going to random storage (0)");
                 
                 var goToNewStorageDestinationPoint = game.rnd.pick(storageCoor);
                 if(goToNewStorageDestinationPoint == null)
@@ -92,11 +93,11 @@ function nextPixelTween(tempPix) {
                 tempPix.wanderTarget = game.rnd.integerInRange(3,4);
                     break;
             case 1:   
-//console.log(tempPix.name+" is wandering around (1) [count:"+tempPix.wanderCount+"/"+tempPix.wanderTarget);
+console.log(tempPix.name+" is wandering around (1) [count:"+tempPix.wanderCount+"/"+tempPix.wanderTarget);
                 wanderAroundTween(tempPix);
                     break;
             case 2:
-//console.log(tempPix.name+" is going to workingsite (2)");
+console.log(tempPix.name+" is going to workingsite (2)");
                 var destinationPoint = new Phaser.Point(buildingQueue[0].x + game.rnd.integerInRange(1,(buildingQueue[0].bEnum.width*10)-2), 
                                                         buildingQueue[0].y + game.rnd.integerInRange(1,(buildingQueue[0].bEnum.height*10)-2) );
                 
@@ -108,7 +109,7 @@ function nextPixelTween(tempPix) {
                 tempPix.wanderTarget = game.rnd.integerInRange(6,8);
                     break;
                 case 3:
-//console.log(tempPix.name+" is wandering around (3) [count:"+tempPix.wanderCount+"/"+tempPix.wanderTarget);
+console.log(tempPix.name+" is wandering around (3) [count:"+tempPix.wanderCount+"/"+tempPix.wanderTarget);
                     wanderAroundTween(tempPix);
                         break;
             }
@@ -117,7 +118,7 @@ function nextPixelTween(tempPix) {
         {
             if(Math.random() < 0.2 && storageCoor.length > 0)
             {
-//console.log(tempPix.name+ " is going to random storage (0 (20%))");
+console.log(tempPix.name+ " is going to random storage (0 (20%))");
                 var goToNewDestinationPoint = game.rnd.pick(storageCoor);
                 var destinationPoint = new Phaser.Point(goToNewDestinationPoint.x + game.rnd.integerInRange(1,8), 
                                                         goToNewDestinationPoint.y + game.rnd.integerInRange(1,8));
@@ -126,7 +127,7 @@ function nextPixelTween(tempPix) {
             }
             else 
             {
-//console.log(tempPix.name+" is wandering around (0 (80%))");
+console.log(tempPix.name+" is wandering around (0 (80%))");
                 wanderAroundTween(tempPix,true);
             }
         }
@@ -342,42 +343,38 @@ function wanderAroundTween(tempPix, noCalculation) {
 function emptyBackpack(tempPix) {
     switch(tempPix.backpack[0]) {
         case 0:
-            if(foodCapReached)
+            if(resources.foodCapReached)
             {  
                 tempPix.workRoutine -= 1;
                 tempPix.capWasFull = true;
             }
             else 
             { 
-                food += tempPix.backpack[1]; 
+                resources.food += tempPix.backpack[1]; 
                 tempPix.backpack = null;
                 tempPix.capWasFull = false;
                     //T0D0 create method
-                    if(!tech3UnlockWoodcutting)
+                    if(!tech.unlock3Woodcutting)
                     {
-                        tech3UnlockWoodcutting = true;
-                        writeLog("Woodcutting have been discovered!",2);
-                        //T0D0update menu if opened on Pixels->Workers OR Buildings->Skilling IMPORTANT IMPACT ON updateMenu()
+                        unlockWoodcutting();
                     }
             }
             break;
         case 1:
-            if(woodCapReached)
+            if(resources.woodCapReached)
             {
                 tempPix.workRoutine -= 1;
                 tempPix.capWasFull = true;
             }
             else 
             { 
-                wood += tempPix.backpack[1]; 
+                resources.wood += tempPix.backpack[1]; 
                 tempPix.backpack = null;
                 tempPix.capWasFull = false;
                     //T0D0 create method
-                    if(!tech4UnlockHousing)
+                    if(!tech.unlock4Housing)
                     {
-                        tech4UnlockHousing = true;
-                        writeLog("Housing have been discovered!",2);
-                        //T0D0update menu if opened on Buildings IMPORTANT IMPACT ON updateMenu()
+                        unlockHousing();
                     }
             }
             break;

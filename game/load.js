@@ -29,6 +29,8 @@ var loadState = {
         game.load.image('lowerBar',"assets/lowerBar.png");
         game.load.image('lowerBarMenu',"assets/lowerBarMenu.png");
         game.load.image('pauseMenu',"assets/pauseMenu.png");
+        game.load.image('buttonbackground',"assets/buttonTile.png");
+
         
         game.load.spritesheet('myPixels', 'assets/myPixel.png', 10, 10, 8);
         game.load.spritesheet('blkPix', 'assets/blackPix.png', 2, 2, 1);
@@ -38,7 +40,5 @@ var loadState = {
         //game.state.start('intro');
 
         game.state.start('mainMenu');
-
-        //game.state.start('mainState');
     }
 };

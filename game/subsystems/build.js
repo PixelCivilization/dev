@@ -69,11 +69,11 @@ function tryToBuild(){
 }
 
 function resourceCheck(buildingEnum) {
-    if(cheatsfreeBuildings) {  return true; }
-    if(buildingEnum.resToBuild[0] > food) { return false; }
-    if(buildingEnum.resToBuild[1] > wood) { return false; }
-    if(buildingEnum.resToBuild[2] > stone) { return false; }
-    if(buildingEnum.resToBuild[3] > metal) { return false; }
+    if(cheats.freeBuildings) {  return true; }
+    if(buildingEnum.resToBuild[0] > resources.food) { return false; }
+    if(buildingEnum.resToBuild[1] > resources.wood) { return false; }
+    if(buildingEnum.resToBuild[2] > resources.stone) { return false; }
+    if(buildingEnum.resToBuild[3] > resources.metal) { return false; }
     return true;
 }
 function quitBuildingMode() {
@@ -84,18 +84,18 @@ function quitBuildingMode() {
 
 function preBuildCalculation() {
     
-    food -= buildEnum.resToBuild[0];
-    wood -= buildEnum.resToBuild[1];
-    stone -= buildEnum.resToBuild[2];
-    metal -= buildEnum.resToBuild[3];
+    resources.food -= buildEnum.resToBuild[0];
+    resources.wood -= buildEnum.resToBuild[1];
+    resources.stone -= buildEnum.resToBuild[2];
+    resources.metal -= buildEnum.resToBuild[3];
     
     switch(buildEnum.id) {
         case BUILDINGS.STOR_BASE.id:
-            tech1UnlockConstructors = true;
-            writeLog("Constructors have been discovered!",2);
+
+            unlockConstructors();
             updateLowerBar();
             menuEnumLastPosition = 0;
-            break;
+        break;
     }
     
     var building = { x: buildMarker.x, y: buildMarker.y, bEnum: buildEnum, bprogress: 0 };
@@ -131,22 +131,20 @@ function postBuildCalculation() {
     switch(buildingQueue[0].bEnum.id) {
             
         case BUILDINGS.STOR_BASE.id:
-            foodCap += 10;
-            woodCap += 10;
+            resources.foodCap += 10;
+            resources.woodCap += 10;
             //T0D0 push array of 4 points
                 storageCoor.push(new Phaser.Point(buildingQueue[0].x,   buildingQueue[0].y));
                 storageCoor.push(new Phaser.Point(buildingQueue[0].x+10,buildingQueue[0].y));
                 storageCoor.push(new Phaser.Point(buildingQueue[0].x,   buildingQueue[0].y+10));
                 storageCoor.push(new Phaser.Point(buildingQueue[0].x+10,buildingQueue[0].y+10));
-            //T0D0 method
-                tech2UnlockFarms = true;
-                writeLog("Farms have been discovered!",2);
-            //T0D0update menu if opened on Pixels
+
+                unlockFarms();
             break;
                 
         case BUILDINGS.STOR_BASIC_EXTEND.id:
-            foodCap += 20;
-            woodCap += 20;
+            resources.foodCap += 20;
+            resources.woodCap += 20;
                 storageCoor.push(new Phaser.Point(buildingQueue[0].x,   buildingQueue[0].y));
                 storageCoor.push(new Phaser.Point(buildingQueue[0].x+10,buildingQueue[0].y));
                 storageCoor.push(new Phaser.Point(buildingQueue[0].x,   buildingQueue[0].y+10));
@@ -154,7 +152,7 @@ function postBuildCalculation() {
             break;
             
         case BUILDINGS.HOUS_BASIC.id:
-            homeCap += 3;
+            resources.homeCap += 3;
             housingCoor.push(new Phaser.Point(buildingQueue[0].x,buildingQueue[0].y));
             break;
             

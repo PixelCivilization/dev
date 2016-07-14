@@ -20,12 +20,13 @@ function showPauseMenu() {
         pauseMenu.anchor.setTo(0.5, 0.5);
         pauseMenu.alpha = 0.8;
         var startPosision = -(pauseMenu.height/2)+70;
-        var labelsText = ["Save", "Load", "Main menu", "Settings"];
+        var labelsText = ["Save", "Load", "Main menu", "Fullscreen"];
         for(var i=0; i<4; i++)
         {
             var pauseMenuLabel = game.add.text(0, startPosision+(i*85), labelsText[i], pixelsUpperBarfontStyle);
             pauseMenuLabel.setShadow(-2, 2, 'rgba(0,0,0,1)', 0);
-            pauseMenuLabel.padding.set(2, 2);
+            pauseMenuLabel.stroke = '#000000';
+            pauseMenuLabel.padding.set(3, 3);
             pauseMenuLabel.anchor.setTo(0.5);
             pauseMenu.addChild(pauseMenuLabel);
         }
@@ -256,7 +257,7 @@ function fillMenu() {
                 var upperBarFontSize = 30;
                 var fontStyle = { font: upperBarFontSize+"px Arial", fill: "#ffffff", align: "left"};
                 var i = 0;
-                if(tech2UnlockFarms)
+                if(tech.unlock2Farms)
                 {
                     createButton(30,startY+buttonInterScape*i, fontStyle, lowerBarMenu, MENU.WORKERPIXELS);
                     i++;
@@ -273,7 +274,7 @@ function fillMenu() {
                     
                     createPixelsGroupLabel(30,startY+buttonInterScape*i,"Farmers: ", fontStyle, lowerBarMenu, farmersPixelsGroup);
                     i++;
-                    if(tech3UnlockWoodcutting)
+                    if(tech.unlock3Woodcutting)
                     {
                         createPixelsGroupLabel(30,startY+buttonInterScape*i,"Woodcutters: ", fontStyle, lowerBarMenu, woodcuttersPixelsGroup);
                         i++;
@@ -311,13 +312,13 @@ function fillMenu() {
                 createButton(30,startY+buttonInterScape*i, fontStyle, lowerBarMenu, MENU.STORAGE);
                 i++;
             
-            if(tech2UnlockFarms)
+            if(tech.unlock2Farms)
             {
                 createButton(30,startY+buttonInterScape*i, fontStyle, lowerBarMenu, MENU.SKILLLING);
                 i++;
             }
             
-            if(tech4UnlockHousing)
+            if(tech.unlock4Housing)
             {
                 createButton(30,startY+buttonInterScape*i, fontStyle, lowerBarMenu, MENU.HOUSING);
                 i++;
@@ -338,7 +339,7 @@ function fillMenu() {
                     
                 fontStyle = { font: upperBarFontSize+"px Arial", fill: "#ffffff", align: "left"};
                 var i=0;
-                if(!tech1UnlockConstructors)
+                if(!tech.unlock1Constructors)
                 {
                     createBuldingButton(30,startY+buttonInterScape*i, fontStyle, lowerBarMenu, BUILDINGS.STOR_BASE);
                 }
@@ -357,7 +358,7 @@ function fillMenu() {
                 var i=0;
                 createButton(30,startY+buttonInterScape*i, fontStyle, lowerBarMenu, MENU.FARMING);
                 i++;
-                if(tech3UnlockWoodcutting)
+                if(tech.unlock3Woodcutting)
                 {
                     createButton(30,startY+buttonInterScape*i, fontStyle, lowerBarMenu, MENU.WOODCUTTING);
                     i++;  
@@ -470,62 +471,65 @@ function createMenu() {
 function updateMenu() {
     if(!pauseMenuUpdateing)
     {
-        if(displayedMenuEnum == MENU.WORKERPIXELS.menuId)
-        {   
-            lowerBarMenu.getChildAt(0).text = "Farmers: "           + farmersPixelsGroup.total;
-            if(tech3UnlockWoodcutting)
-            {
-            lowerBarMenu.getChildAt(1).text = "Woodcutters: "       + woodcuttersPixelsGroup.total;
-                if(techStoneDiscovered) //TO RENAME!
-                { 
-                    lowerBarMenu.getChildAt(2).text = "Stonecutters: "  + stonecuttersPixelsGroup.total;
-                    if(techMetalDiscovered) //TO RENAME!
-                    {
-                        lowerBarMenu.getChildAt(3).text = "Miners: "    + minersPixelsGroup.total;
+        switch(displayedMenuEnum)
+        {
+            case MENU.WORKERPIXELS.menuId:
+                lowerBarMenu.getChildAt(0).text = "Farmers: "           + farmersPixelsGroup.total;
+                if(tech.unlock3Woodcutting)
+                {
+                    lowerBarMenu.getChildAt(1).text = "Woodcutters: "       + woodcuttersPixelsGroup.total;
+                    if(techStoneDiscovered) //TO RENAME!
+                    { 
+                        lowerBarMenu.getChildAt(2).text = "Stonecutters: "  + stonecuttersPixelsGroup.total;
+                        if(techMetalDiscovered) //TO RENAME!
+                        {
+                            lowerBarMenu.getChildAt(3).text = "Miners: "    + minersPixelsGroup.total;
+                        }
                     }
                 }
-            }
-            for(var i=0; i < lowerBarMenu.children.length; i++)
-            {
-                for(var j=0; j < lowerBarMenu.getChildAt(i).children.length; j++)
+                for(var i=0; i < lowerBarMenu.children.length; i++)
                 {
-                    if(pixelsGroupsProcedureCheck(lowerBarMenu.getChildAt(i).getChildAt(j).sourceGroup)) { lowerBarMenu.getChildAt(i).getChildAt(j).addColor('#ffffff', 0); }
-                    else 
-                    { 
-                        lowerBarMenu.getChildAt(i).getChildAt(j).addColor('#b8b894', 0); 
-                        lowerBarMenu.getChildAt(i).getChildAt(j).strokeThickness = 0;
-                        
-                    } 
+                    for(var j=0; j < lowerBarMenu.getChildAt(i).children.length; j++)
+                    {
+                        if(pixelsGroupsProcedureCheck(lowerBarMenu.getChildAt(i).getChildAt(j).sourceGroup)) { lowerBarMenu.getChildAt(i).getChildAt(j).addColor('#ffffff', 0); }
+                        else 
+                        { 
+                            lowerBarMenu.getChildAt(i).getChildAt(j).addColor('#b8b894', 0); 
+                            lowerBarMenu.getChildAt(i).getChildAt(j).strokeThickness = 0;
+                            
+                        } 
+                    }
                 }
-            }
-        }
+            break;
         
-        if(displayedMenuEnum == MENU.UTILITYPIXELS.menuId)
-        {   
-            lowerBarMenu.getChildAt(0).text = "Constructors: "           + constrPixelsGroup.total;
-
-            for(var i=0; i < lowerBarMenu.children.length; i++)
-            {
-                for(var j=0; j < lowerBarMenu.getChildAt(i).children.length; j++)
+            case MENU.UTILITYPIXELS.menuId:
+                lowerBarMenu.getChildAt(0).text = "Constructors: "           + constrPixelsGroup.total;
+    
+                for(var i=0; i < lowerBarMenu.children.length; i++)
                 {
-                    if(pixelsGroupsProcedureCheck(lowerBarMenu.getChildAt(i).getChildAt(j).sourceGroup)) { lowerBarMenu.getChildAt(i).getChildAt(j).addColor('#ffffff', 0); }
-                    else 
-                    { 
-                        lowerBarMenu.getChildAt(i).getChildAt(j).addColor('#b8b894', 0); 
-                        lowerBarMenu.getChildAt(i).getChildAt(j).strokeThickness = 0;
-                    } 
+                    for(var j=0; j < lowerBarMenu.getChildAt(i).children.length; j++)
+                    {
+                        if(pixelsGroupsProcedureCheck(lowerBarMenu.getChildAt(i).getChildAt(j).sourceGroup)) { lowerBarMenu.getChildAt(i).getChildAt(j).addColor('#ffffff', 0); }
+                        else 
+                        { 
+                            lowerBarMenu.getChildAt(i).getChildAt(j).addColor('#b8b894', 0); 
+                            lowerBarMenu.getChildAt(i).getChildAt(j).strokeThickness = 0;
+                        } 
+                    }
                 }
-            }
-        }
+            break;
         
         
-        if(displayedMenuEnum == MENU.STORAGE.menuId || displayedMenuEnum == MENU.HOUSING.menuId)
-        {
-            for(var i=1; i < lowerBarMenu.children.length; i++)
-            {
-                if(resourceCheck(lowerBarMenu.getChildAt(i).buildingEnum)) { lowerBarMenu.getChildAt(i).addColor('#ffffff', 0); }
-                else { lowerBarMenu.getChildAt(i).addColor('#b8b894', 0); } 
-            }
+            case MENU.STORAGE.menuId: 
+            case MENU.HOUSING.menuId:
+            case MENU.FARMING.menuId:
+            case MENU.WOODCUTTING.menuId:
+                for(var i=1; i < lowerBarMenu.children.length; i++)
+                {
+                    if(resourceCheck(lowerBarMenu.getChildAt(i).buildingEnum)) { lowerBarMenu.getChildAt(i).addColor('#ffffff', 0);}
+                    else { lowerBarMenu.getChildAt(i).addColor('#b8b894', 0);} 
+                }
+            break;
         }
     }
 }
@@ -547,7 +551,7 @@ function updateLowerBar(create) {
     var upperBarFontSize = 24;
     var fontStyle = { font: upperBarFontSize+"px Arial", fill: "#ffffff", align: "left", tabs: [ 250, 250, 250] };
     
-        if(tech1UnlockConstructors)
+        if(tech.unlock1Constructors)
         {
             createButton(40+(200*i),-(lowerBar.height/2)+2, fontStyle, lowerBar, MENU.PIXELS);
             i++;
@@ -577,20 +581,20 @@ function updateResourcesLabel(){
     var textWood = "";
     var textStone = "";
     var textMetal = "";
-    if(tech2UnlockFarms)
+    if(tech.unlock2Farms)
     {
-        textFood = "Food: " + Math.floor(food) + "/" + foodCap;
+        textFood = "Food: " + Math.floor(resources.food) + "/" + resources.foodCap;
         
-        if(tech3UnlockWoodcutting)
+        if(tech.unlock3Woodcutting)
         {
-            textWood = "Wood: " + Math.floor(wood) + "/" + woodCap;
+            textWood = "Wood: " + Math.floor(resources.wood) + "/" + resources.woodCap;
             
             if(techStoneDiscovered) //TO RENAME!
             { 
-                textStone = "Stone: " + Math.floor(stone) + "/" + stoneCap; 
+                textStone = "Stone: " + Math.floor(resources.stone) + "/" + resources.stoneCap; 
                 if(techMetalDiscovered) //TO RENAME!
                 {
-                    textMetal = "Metal: " + Math.floor(metal) + "/" + metalCap;
+                    textMetal = "Metal: " + Math.floor(resources.metal) + "/" + resources.metalCap;
                 }
             }
         }
@@ -599,23 +603,23 @@ function updateResourcesLabel(){
     var textResources =  textFood + "\t" + textWood + "\t" + textStone + "\t" + textMetal;
     upperBar.getChildAt(0).text = textResources;
     
-    pixelsUpperBar.getChildAt(0).text =  "All Pixels: " +getAllPixels()+"\t Without work: "+ unemployedPixelsGroup.total + "\t Without home: " + (getAllPixels() - homeCap);
+    pixelsUpperBar.getChildAt(0).text =  "All Pixels: " +getAllPixels()+"\t Without work: "+ unemployedPixelsGroup.total + "\t Without home: " + (getAllPixels() - resources.homeCap);
 
-    if(food>=foodCap && !foodCapReached) { writeLog("Food cap reached!",1) }
-    if(wood>=woodCap && !woodCapReached) { writeLog("Wood cap reached!",1) }
-    if(stone>=stoneCap && !stoneCapReached) { writeLog("Stone cap reached!",1) }
-    if(metal>=metalCap && !metalCapReached) { writeLog("Metal cap reached!",1) }
+    if(resources.food>=resources.foodCap && !resources.foodCapReached) { writeLog("Food cap reached!",1) }
+    if(resources.wood>=resources.woodCap && !resources.woodCapReached) { writeLog("Wood cap reached!",1) }
+    if(resources.stone>=resources.stoneCap && !resources.stoneCapReached) { writeLog("Stone cap reached!",1) }
+    if(resources.metal>=resources.metalCap && !resources.metalCapReached) { writeLog("Metal cap reached!",1) }
 
     //flags used to prevent from bugging log with messages!
-    foodCapReached = false;
-    woodCapReached = false;
-    stoneCapReached = false;
-    metalCapReached = false;
+    resources.foodCapReached = false;
+    resources.woodCapReached = false;
+    resources.stoneCapReached = false;
+    resources.metalCapReached = false;
     
-    if(food>=foodCap)   { foodCapReached = true; }
-    if(wood>=woodCap)   { woodCapReached = true; }
-    if(stone>=stoneCap) { stoneCapReached = true; }
-    if(metal>=metalCap) { metalCapReached = true; }
+    if(resources.food>=resources.foodCap)   { resources.foodCapReached = true; }
+    if(resources.wood>=resources.woodCap)   { resources.woodCapReached = true; }
+    if(resources.stone>=resources.stoneCap) { resources.stoneCapReached = true; }
+    if(resources.metal>=resources.metalCap) { resources.metalCapReached = true; }
 }
 
 
@@ -660,6 +664,7 @@ function drawLog(){
         
 }
 function writeLog(newLine, type){
+    
     logLinesType.shift();
     logLinesType.push(type);
 

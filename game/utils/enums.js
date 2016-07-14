@@ -28,3 +28,34 @@ var BUILDINGS = {
 
 };
 
+var GAMETYPE = {
+        NEW             : {id: 1, text: "New game" },
+        LOAD            : {id: 3, text: "Load game" }
+};
+
+var MAINMENUBUTTONS = {
+        CONTINUE        : {id: 1, text: "Continue"  },
+        NEWGAME         : {id: 2, text: "New game"  },
+        LOADGAME        : {id: 3, text: "Load game" },
+        SETTINGS        : {id: 4, text: "Settings"  }
+};
+
+var SAVEFIELDS = [
+		'timeStamp',
+		'mapString',
+		'pixelsArray',
+		'resources',
+		'worldTime',
+		'buildingQueue',
+		'resourcePositionAndCondition',
+		'housingCoor',
+		'storageCoor',
+		'tech',
+		'gameCamera',
+		'gameStats'
+	];
+	
+var SETTINGFIELDS = [
+                'settings',
+                'globalStats'
+        ];
