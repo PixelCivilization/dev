@@ -1,7 +1,7 @@
 function setBuildMarker() {
     buildMarker.clear();
     buildMarker.lineStyle(3, 0xffffff, 1);
-    buildMarker.drawRect(0, 0, 10*buildWidth, 10*buildHeight);
+    buildMarker.drawRect(0, 0, 10*buildEnum.width, 10*buildEnum.height);
                 
                 //set rangeMarker
                 /*
@@ -186,6 +186,7 @@ function buildingTerrainCheck() {
                 }
                 buildMarker.endFill();
                 break;
+                
             case 1:
                 buildMarker.beginFill(0xffffff, 0.5);
                 
@@ -285,6 +286,7 @@ function buildingTerrainCheck() {
                 buildMarker.endFill();
                 returnState = returnState && (isExtendingNorthSide || isExtendingSouthSide || isExtendingWestSide || isExtendingEastSide);
                 break;
+                
             case 2:
                 buildMarker.beginFill(0xffffff, 0.5);
                 
@@ -370,27 +372,67 @@ function buildingTerrainCheck() {
 
 function scanForTile(sourceX,sourceY,desiredTileId) {
     
-    for(var distance = 1; distance < 20; distance++)
-    {
-        var buildCollisionTiles = mapLayerGround.getTiles(sourceX-(10*distance), sourceY-(10*distance), ((distance*2)+1)*10, ((distance*2)+1)*10, false);
+    var scanerTiles = mapLayerGround.getTiles(sourceX, sourceY, 1, 1, false);
     
-        if(buildCollisionTiles.length > 0) 
-        {  
-            //T0D0 speed up scaner
-            for(var i=0; i < buildCollisionTiles.length; i++)
-            {
-                if(buildCollisionTiles[i].index == desiredTileId) 
-                { 
-                        return buildCollisionTiles[i];
+    //console.log("Pix:"+sourceX+","+sourceY+" scanerTiles[i].index:"+scanerTiles[0].index+" scanerTiles[0].x:"+scanerTiles[0].x+" scanerTiles[0].y:"+scanerTiles[0].y);
+
+    
+    if(scanerTiles[0].index != desiredTileId)
+    {
+        //startScanning
+        for(var distance = 1; distance < 30; distance++)
+        {
+            
+            scanerTiles = mapLayerGround.getTiles(sourceX-(10*distance), sourceY-(10*distance), ((distance*2))*10, ((distance*2))*10, false);
+            
+            
+                //EastWeastFaceOfScaner
+                for(var k=1; k<distance*2; k++) 
+                {
+                    for(var l=0; l < (distance*2)+1; l = l+(distance*2))
+                    {
+                        var i = (k*((distance*2)+1))+l;
+                        
+                        if(scanerTiles[i].index == desiredTileId)
+                        {
+                            return scanerTiles[i];
+                        }
+                        //console.log("distance:"+distance+" i:"+i+" scanerTiles[i].index:"+scanerTiles[i].index+" scanerTiles[i].x:"+scanerTiles[i].x);
+                    } 
+                }
+                        
+                //NorthsouthFaceOfScaner
+                for(var k=0; k < (distance*2)+1; k = k+(distance*2))
+                {
+                    for(var l=1; l<distance*2; l++)
+                    {
+                        var i = (k*((distance*2)+1))+l;
+                        
+                        if(scanerTiles[i].index == desiredTileId)
+                        {
+                            return scanerTiles[i];
+                        }
+                    } 
                 }
                 
-            }
-    
+                //CornersOfScaner
+                for(var k=0; k < (distance*2)+1; k = k+(distance*2))
+                {
+                    for(var l=0; l < (distance*2)+1; l = l+(distance*2))
+                    {
+                        var i = (k*((distance*2)+1))+l;
+                        
+                        if(scanerTiles[i].index == desiredTileId)
+                        {
+                            return scanerTiles[i];
+                        }
+                    }
+                }
         }
-        else 
-        { 
-//console.log("Scaner error - no tiles geted");
-        }
+    }
+    else 
+    { 
+        return scanerTiles[0]; 
     }
     return null;
 }
@@ -466,7 +508,20 @@ function drawResourceBar(item, index) {
 
 
 function getClosetsFrom(targetsPointsArray, sourcePoint) {
-    // body...
+    var shortestDist = null;
+    var shortestIndex = null;
+    for(var i in targetsPointsArray)
+    {
+        var tempDist = calcDistance(targetsPointsArray[i], sourcePoint);
+        
+        if(tempDist < shortestDist || shortestDist==null)
+        {
+            shortestDist = tempDist;
+            shortestIndex = i;
+        }
+        
+    }
+    return targetsPointsArray[shortestIndex];
 }
 
 function drawBuildingRange(argument) {

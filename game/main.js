@@ -22,7 +22,12 @@ var mainState = {
 
 console.log("Pixel Civilization");
 
+//#CONST
 var w = 1000, h = 1000;
+
+var pixelWalkTimePerPixel = 30;
+//so: pixelspeed = 1[px]/pixelWalkTimePerPixel[ms]
+var worksiteTile = 8;
 
 //#Map
 var map;
@@ -31,9 +36,6 @@ var mapLayerGround;
 //#Game
 var myPixelsGroup, unemployedPixelsGroup, constrPixelsGroup;
 var woodcuttersPixelsGroup, farmersPixelsGroup, stonecuttersPixelsGroup, minersPixelsGroup;
-
-var pixelWalkTimePerPixel = 30;
-//so: pixelspeed = 1[px]/pixelWalkTimePerPixel[ms]
 
 var worldTime;
 
@@ -57,18 +59,14 @@ var groupMenuBarsAndBoxes;
     var lowerBar;
     var lowerBarMenu;
         //#Menu
-        var mouseOverAnyMenu = false;
-        var pauseMenuUpdateing = false;
-        var displayedMenuEnum = 0;
-        var menuEnumLastPosition = 0;
-        var lowerBarMenuTween;
+        var mouseOverAnyMenu;
+        var pauseMenuUpdateing;
+        var displayedMenuEnum;
+        var menuEnumLastPosition;
         
     var pauseMenu;
     var gameFilter;
-    var gameFilterAlpha = 0;
     
-        
-        
 //#Building
 var buildingQueue = [];
 var buildingModeEnabled = false;
@@ -76,7 +74,6 @@ var buildEnum;
 var buildWidth, buildHeight;    //T0 DELETE AFTER CHANGES buildingTerrainCheck()
 var buildMarker;
 var buildProgressBar;
-var worksiteTile = 8;
 
 //#Map scrolling
 var scrollingMap = false;
@@ -301,7 +298,7 @@ function create() {
     var worldTimeTimer = game.time.create(false);
     worldTimeTimer.loop(50, updateWorldTime, this);
     worldTimeTimer.start();
-
+    
     gameFilter = game.add.graphics();
     
     if(lunchGameType == GAMETYPE.LOAD)
@@ -321,7 +318,7 @@ function render() {
     
     //game.debug.text(resourcePositionAndCondition.length + " " + "" + " " + "" + ""  + " ", 30 ,185);
     
-    game.debug.text(cheats.freeBuildings+" " + " " + " " + worldTime[1] + ":" + worldTime[0], 30, 145);
+    game.debug.text(getTimeString(), 30, 145);
 
     game.debug.text( "FPS: " + game.time.fps || '--' , 30, 200);
     
@@ -431,8 +428,6 @@ function updateWorldTime() {
         worldTime[4] += 1;
     }
     
-    //updateGameFilter();
-    
 }
 function getTimeString() {
     var timeString = "["+worldTime[2]+"."+worldTime[3]+"."+worldTime[4]+" ";
@@ -441,21 +436,6 @@ function getTimeString() {
     if(worldTime[0] < 10) { timeString += "0"; }
     timeString += worldTime[0]+"]";
     return timeString;
-}
-
-function updateGameFilter() {
-    //gameFilterAlpha += 0.1;
-    
-    var dayHours = 12;
-    var nightHours = 12;
-    
-    if(worldTime[1] >= 12) { gameFilterAlpha += ((0.5/12)/60); }
-    else { gameFilterAlpha -= ((0.5/12)/60); }
-    
-    gameFilter.clear();
-    gameFilter.beginFill(0x000000, gameFilterAlpha);
-    gameFilter.drawRect(0, 0, 1500, 2000);
-    gameFilter.endFill();
 }
 
 function saveGame(saveslot) {
@@ -605,6 +585,7 @@ var load = {
         game.camera.x = loadedData['gameCamera'].x;    
         game.camera.y = loadedData['gameCamera'].y;
         writeLog("Game has been loaded",2);
+        
         myPixelsGroup.forEach(function(subGroup) {
             subGroup.forEach(function(tempPix) {
                 nextPixelTween(tempPix);
