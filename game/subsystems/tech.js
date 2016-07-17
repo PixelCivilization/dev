@@ -14,25 +14,25 @@ var tech =
 function unlockConstructors() {
     tech.unlock1Constructors = true;
     writeLog("Constructors have been discovered!",2);
-    
+    changeMenu(displayedMenuEnum, true);
 }
 
 
 function unlockFarms() {
     tech.unlock2Farms = true;
     writeLog("Farms have been discovered!",2);
-    //T0D0update menu if opened on Pixels
+    changeMenu(displayedMenuEnum, true);
 }
 
 
 function unlockWoodcutting() {
     tech.unlock3Woodcutting = true;
     writeLog("Woodcutting have been discovered!",2);
-    //T0D0update menu if opened on Pixels->Workers OR Buildings->Skilling IMPORTANT IMPACT ON updateMenu()
+    changeMenu(displayedMenuEnum, true);
 }
 
 function unlockHousing() {
     tech.unlock4Housing = true;
     writeLog("Housing have been discovered!",2);
-    //T0D0update menu if opened on Buildings IMPORTANT IMPACT ON updateMenu()
+    changeMenu(displayedMenuEnum, true);
 }

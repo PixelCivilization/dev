@@ -27,7 +27,7 @@ var mainMenuState = {
         
     },
     render: function(){
-        game.debug.text("FPS: " + game.time.fps || '--' , 30, 200);
+        game.debug.text("Pixel Civilization 0.3 FPS: " + game.time.fps || '--' , 30, 970);
     }
     
 };

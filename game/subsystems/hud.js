@@ -426,21 +426,20 @@ function fillMenu() {
         pauseMenuUpdateing = false;
 }
 
-function changeMenu(newMenuId) {
+function changeMenu(newMenuId, reload) {
+    reload = reload  || false;
     pauseMenuUpdateing = true;    
     lowerBarMenu.fixedToCamera = false;
-    lowerBarMenuTween = game.add.tween(lowerBarMenu).to( {x: (lowerBarMenu.x-300)}, 200, Phaser.Easing.Linear.None, true);
-    if(displayedMenuEnum != newMenuId)  { menuEnumLastPosition =  displayedMenuEnum; }
+    var lowerBarMenuTween = game.add.tween(lowerBarMenu).to( {x: (lowerBarMenu.x-300)}, 200, Phaser.Easing.Linear.None, true);
+    if((displayedMenuEnum != newMenuId) || reload)  { menuEnumLastPosition =  displayedMenuEnum; }
     else                                { newMenuId = 0; } 
     displayedMenuEnum = newMenuId;
     lowerBarMenuTween.onComplete.addOnce(destroyMenu);
 }
-
 function destroyMenu() {
     groupMenuBarsAndBoxes.remove(lowerBarMenu, true);
     createMenu();
 }
-
 function createMenu() {
     lowerBarMenu = groupMenuBarsAndBoxes.create(lowerBar.x-300, lowerBar.y-lowerBar.height-400, 'lowerBarMenu');
     lowerBarMenu.inputEnabled = true;
@@ -452,7 +451,7 @@ function createMenu() {
 
     if(displayedMenuEnum != 0) 
     { 
-        lowerBarMenuTween = game.add.tween(lowerBarMenu).to( {x: (lowerBar.x)}, 200, Phaser.Easing.Linear.None, true); 
+        var lowerBarMenuTween = game.add.tween(lowerBarMenu).to( {x: (lowerBar.x)}, 200, Phaser.Easing.Linear.None, true); 
         lowerBarMenuTween.onComplete.addOnce(function() {
                 lowerBarMenu.fixedToCamera = true;
                 lowerBarMenu.cameraOffset.x = 0;

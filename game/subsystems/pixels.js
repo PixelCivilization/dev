@@ -1,3 +1,6 @@
+var outOfForests = false;
+var outOfFarms = false;
+
 function getAllPixels(){
     var result = unemployedPixelsGroup.total + 
                 farmersPixelsGroup.total + woodcuttersPixelsGroup.total + stonecuttersPixelsGroup.total + minersPixelsGroup.total +
@@ -34,17 +37,11 @@ function createPixel() {
     return tempPixel;
 }
 
-function setGoTween(tempPix, destinationPoint) {
-    var destinationLongitude = calcDistance(destinationPoint, tempPix.position);
-    var waitTime = game.rnd.integerInRange(800,1200);
-    var pixTween = game.add.tween(tempPix).to({ x: destinationPoint.x, y: destinationPoint.y },  
-                                                            destinationLongitude*pixelWalkTimePerPixel, Phaser.Easing.Linear.None, true, waitTime, 0, false);
-    pixTween.onComplete.add(nextPixelTween, this, tempPix);
-}
-
 function nextPixelTween(tempPix) {
     //This method is soft looped for each Pixel
     
+    
+    //T0D0 rewrite on switch
     if(tempPix.parent == unemployedPixelsGroup)
     {
         if(Math.random() < 0.1 && housingCoor.length > 0)
@@ -70,7 +67,7 @@ function nextPixelTween(tempPix) {
         switch(tempPix.workRoutine) {
             case 0:
                     
-console.log(tempPix.name+" is going to random storage (0)");
+//console.log(tempPix.name+" is going to random storage (0)");
                 
                 var goToNewStorageDestinationPoint = game.rnd.pick(storageCoor);
                 if(goToNewStorageDestinationPoint == null)
@@ -93,11 +90,11 @@ console.log(tempPix.name+" is going to random storage (0)");
                 tempPix.wanderTarget = game.rnd.integerInRange(3,4);
                     break;
             case 1:   
-console.log(tempPix.name+" is wandering around (1) [count:"+tempPix.wanderCount+"/"+tempPix.wanderTarget);
+//console.log(tempPix.name+" is wandering around (1) [count:"+tempPix.wanderCount+"/"+tempPix.wanderTarget);
                 wanderAroundTween(tempPix);
                     break;
             case 2:
-console.log(tempPix.name+" is going to workingsite (2)");
+//console.log(tempPix.name+" is going to workingsite (2)");
                 var destinationPoint = new Phaser.Point(buildingQueue[0].x + game.rnd.integerInRange(1,(buildingQueue[0].bEnum.width*10)-2), 
                                                         buildingQueue[0].y + game.rnd.integerInRange(1,(buildingQueue[0].bEnum.height*10)-2) );
                 
@@ -109,7 +106,7 @@ console.log(tempPix.name+" is going to workingsite (2)");
                 tempPix.wanderTarget = game.rnd.integerInRange(6,8);
                     break;
                 case 3:
-console.log(tempPix.name+" is wandering around (3) [count:"+tempPix.wanderCount+"/"+tempPix.wanderTarget);
+//console.log(tempPix.name+" is wandering around (3) [count:"+tempPix.wanderCount+"/"+tempPix.wanderTarget);
                     wanderAroundTween(tempPix);
                         break;
             }
@@ -118,7 +115,7 @@ console.log(tempPix.name+" is wandering around (3) [count:"+tempPix.wanderCount+
         {
             if(Math.random() < 0.2 && storageCoor.length > 0)
             {
-console.log(tempPix.name+ " is going to random storage (0 (20%))");
+//console.log(tempPix.name+ " is going to random storage (0 (20%))");
                 var goToNewDestinationPoint = game.rnd.pick(storageCoor);
                 var destinationPoint = new Phaser.Point(goToNewDestinationPoint.x + game.rnd.integerInRange(1,8), 
                                                         goToNewDestinationPoint.y + game.rnd.integerInRange(1,8));
@@ -127,7 +124,7 @@ console.log(tempPix.name+ " is going to random storage (0 (20%))");
             }
             else 
             {
-console.log(tempPix.name+" is wandering around (0 (80%))");
+//console.log(tempPix.name+" is wandering around (0 (80%))");
                 wanderAroundTween(tempPix,true);
             }
         }
@@ -138,19 +135,10 @@ console.log(tempPix.name+" is wandering around (0 (80%))");
     switch(tempPix.workRoutine) {
         case 0:
 //console.log(tempPix.name + " is going to random storage (0)");
-            var goToNewStorageDestinationPoint = game.rnd.pick(storageCoor);
+            //var goToNewStorageDestinationPoint = game.rnd.pick(storageCoor);
             
 //console.log(tempPix.name + " is going to closest storage (0)");
-            //var goToNewStorageDestinationPoint = scanForTile(tempPix.x, tempPix.y, BUILDINGS.STOR_BASE.tileId);
-            //goToNewStorageDestinationPoint.x = goToNewStorageDestinationPoint.x*10;
-            //goToNewStorageDestinationPoint.y = goToNewStorageDestinationPoint.y*10;
-            
-            if(goToNewStorageDestinationPoint == null)
-            {
-//console.log(tempPix.name + " can't find storage!");
-                wanderAroundTween(tempPix);
-                break;
-            }
+            var goToNewStorageDestinationPoint = getClosetsFrom(storageCoor, tempPix.position);
             
             var destinationPoint = new Phaser.Point(goToNewStorageDestinationPoint.x + game.rnd.integerInRange(1,8), 
                                                     goToNewStorageDestinationPoint.y + game.rnd.integerInRange(1,8));
@@ -173,10 +161,15 @@ console.log(tempPix.name+" is wandering around (0 (80%))");
             
             if(goToTile == null)
             {
-//console.log(tempPix.name + " can't find any farm!");
+                if(!outOfFarms)
+                {
+                    writeLog("No farms detected!",1);
+                    outOfFarms = true;
+                }
                 wanderAroundTween(tempPix);
                 break;
             }
+            outOfFarms = false;
             
             var destinationPoint = new Phaser.Point((goToTile.x*10)+game.rnd.integerInRange(1,8), 
                                                     (goToTile.y*10)+game.rnd.integerInRange(1,8));
@@ -200,20 +193,11 @@ console.log(tempPix.name+" is wandering around (0 (80%))");
     switch(tempPix.workRoutine) {
         case 0:
 //console.log(tempPix.name + " is going to random storage (0)");
-            var goToNewStorageDestinationPoint = game.rnd.pick(storageCoor);
+            //var goToNewStorageDestinationPoint = game.rnd.pick(storageCoor);
             
 //console.log(tempPix.name + " is going to closest storage (0)");
-            //var goToNewStorageDestinationPoint = scanForTile(tempPix.x, tempPix.y, BUILDINGS.STOR_BASIC_EXTEND.tileId);
-            //goToNewStorageDestinationPoint.x = goToNewStorageDestinationPoint.x*10;
-            //goToNewStorageDestinationPoint.y = goToNewStorageDestinationPoint.y*10;
-            
-            if(goToNewStorageDestinationPoint == null)
-            {
-                writeLog(tempPix.name + " can't find storage!",1);
-                wanderAroundTween(tempPix);
-                break;
-            }
-            
+            var goToNewStorageDestinationPoint = getClosetsFrom(storageCoor, tempPix.position);
+        
             var destinationPoint = new Phaser.Point((goToNewStorageDestinationPoint.x + game.rnd.integerInRange(1,8)), 
                                                     (goToNewStorageDestinationPoint.y + game.rnd.integerInRange(1,8)));
                 
@@ -236,10 +220,17 @@ console.log(tempPix.name+" is wandering around (0 (80%))");
             
             if(goToTile == null)
             {
-//console.log(tempPix.name + " can't find any forest!");
+                if(!outOfForests)
+                {
+                    writeLog("No forests detected!",1);
+                    outOfForests = true;
+                }
                 wanderAroundTween(tempPix);
                 break;
             }
+            outOfForests = false;
+            
+            
             var destinationPoint = new Phaser.Point(((goToTile.x)*10) + game.rnd.integerInRange(1,8), 
                                                     ((goToTile.y)*10) + game.rnd.integerInRange(1,8) );
 
@@ -264,8 +255,9 @@ console.log(tempPix.name+" is wandering around (0 (80%))");
 //BACKPACK MAPPING [0] - resource (0-food,1-wood,2-stone,3-metal), [1] - amount
 //nextWorkRoutine stepNextWorkRoutine + calculations ~!NOT CALL MOVING FUNCTIONS!~
 function nextWorkRoutine(tempPix) {
-        tempPix.workRoutine += 1;
-        
+    tempPix.workRoutine += 1;
+
+    //T0D0 rewrite on switch        
         if(tempPix.parent == constrPixelsGroup)
         {
             if(tempPix.workRoutine >= 4) 
@@ -338,6 +330,13 @@ function wanderAroundTween(tempPix, noCalculation) {
             
             tempPix.wanderCount += 1;
         }
+}
+function setGoTween(tempPix, destinationPoint) {
+    var destinationLongitude = calcDistance(destinationPoint, tempPix.position);
+    var waitTime = game.rnd.integerInRange(800,1200);
+    var pixTween = game.add.tween(tempPix).to({ x: destinationPoint.x, y: destinationPoint.y },  
+                                                            destinationLongitude*pixelWalkTimePerPixel, Phaser.Easing.Linear.None, true, waitTime, 0, false);
+    pixTween.onComplete.add(nextPixelTween, this, tempPix);
 }
 
 function emptyBackpack(tempPix) {
