@@ -19,11 +19,11 @@ function showPauseMenu() {
         pauseMenu = game.add.sprite(w/2+game.camera.position.x, h/2+game.camera.position.y, 'pauseMenu');
         pauseMenu.anchor.setTo(0.5, 0.5);
         pauseMenu.alpha = 0.8;
-        var startPosision = -(pauseMenu.height/2)+70;
-        var labelsText = ["Save", "Load", "Main menu", "Fullscreen"];
-        for(var i=0; i<4; i++)
+        var startPosision = -(pauseMenu.height/2)+100;
+        var labelsText = ["Save game", "Main menu", "Fullscreen"];
+        for(var i in labelsText)
         {
-            var pauseMenuLabel = game.add.text(0, startPosision+(i*85), labelsText[i], pixelsUpperBarfontStyle);
+            var pauseMenuLabel = game.add.text(0, startPosision+(i*100), labelsText[i], pixelsUpperBarfontStyle);
             pauseMenuLabel.setShadow(-2, 2, 'rgba(0,0,0,1)', 0);
             pauseMenuLabel.stroke = '#000000';
             pauseMenuLabel.padding.set(3, 3);
@@ -36,7 +36,6 @@ function hidePauseMenu() {
     gameFilter.clear();
     game.paused = false;
     pauseMenu.destroy();
-    
 }
 
 

@@ -307,7 +307,7 @@ function nextWorkRoutine(tempPix) {
 }
 
 function wanderAroundTween(tempPix, noCalculation) {
-        if(noCalculation == null) { noCalculation = false; }
+        noCalculation = noCalculation || false;
         
         var destinationPoint = new Phaser.Point( (mapLayerGround.getTileX(tempPix.x)*10)+game.rnd.between(1,8), (mapLayerGround.getTileY(tempPix.y)*10)+game.rnd.between(1,8));
         

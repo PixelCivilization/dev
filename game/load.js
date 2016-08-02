@@ -30,6 +30,7 @@ var loadState = {
         game.load.image('lowerBarMenu',"assets/lowerBarMenu.png");
         game.load.image('pauseMenu',"assets/pauseMenu.png");
         game.load.image('buttonbackground',"assets/buttonTile.png");
+        game.load.image('mainMenuWindowBox',"assets/mainMenuWindowBox.png");
 
         
         game.load.spritesheet('myPixels', 'assets/myPixel.png', 10, 10, 8);
