@@ -28,19 +28,29 @@ var BUILDINGS = {
 
 };
 
+var keys = ['autosave', 'saveSlot1', 'saveSlot2', 'saveSlot3'];
+
 var GAMETYPE = {
         NEW             : {id: 1, text: "New game" },
         LOAD            : {id: 3, text: "Load game" }
 };
 
 var MAINMENUBUTTONS = {
-        CONTINUE        : {id: 1, text: "Continue"  },
-        NEWGAME         : {id: 2, text: "New game"  },
-        LOADGAME        : {id: 3, text: "Load game" },
-        SETTINGS        : {id: 4, text: "Settings"  }
+        CONTINUE        : {id: 1, text: "CONTINUE"  },
+        NEWGAME         : {id: 2, text: "NEW GAME"  },
+        LOADGAME        : {id: 3, text: "LOAD GAME" },
+        SETTINGS        : {id: 4, text: "SETTINGS"  }
+};
+
+var MAINMENUWINDOWS = {
+        LOAD                    : {id: 0, title: "Select save slot" },
+        DELETE                  : {id: 1, title: "Delete game: " },
+        NEWGAMESELECTSLOT       : {id: 2, title: "Select save slot" }
+        
 };
 
 var SAVEFIELDS = [
+                //'gameInfo'
 		'timeStamp',
 		'mapString',
 		'pixelsArray',

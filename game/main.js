@@ -632,18 +632,22 @@ var pauseLogic = {
                 switch(i)
                 {
                     case 0:
+                        //renderWindow?
+                        mainMenu.showMenuWindow(MAINMENUWINDOWS.LOAD);
+                        
+                        /*
                         game.paused = false;
-                        //change key
-                        saveGame('autosave');
+                        saveGame(saveKey);
                         game.paused = true; 
+                        */
                     break;
                     
-                    case 2:
+                    case 1:
                         game.paused = false;
                         game.state.start('mainMenu');
                     break;
                     
-                    case 3:
+                    case 2:
                         game.paused = false;
                         game.scale.refresh();
                         game.scale.startFullScreen();
