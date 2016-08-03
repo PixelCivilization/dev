@@ -13,17 +13,17 @@ function showPauseMenu() {
         gameFilter.endFill();
         
         var pixelsUpperBarFontSize = 35;
-        var pixelsUpperBarfontStyle = { font: pixelsUpperBarFontSize+"px Arial", fill: "#ffffff", align: "left", tabs: [ 120, 150, 10] };
+        var pixelsUpperBarfontStyle = { font: pixelsUpperBarFontSize+"px "+globalFont, fill: "#ffffff", align: "left", tabs: [ 120, 150, 10] };
     
         
         pauseMenu = game.add.sprite(w/2+game.camera.position.x, h/2+game.camera.position.y, 'pauseMenu');
         pauseMenu.anchor.setTo(0.5, 0.5);
         pauseMenu.alpha = 0.8;
-        var startPosision = -(pauseMenu.height/2)+100;
-        var labelsText = ["Save game", "Main menu", "Fullscreen"];
+        var startPosision = -(pauseMenu.height/2)+75;
+        var labelsText = ["Return", "Save game", "Main menu", "Fullscreen"];
         for(var i in labelsText)
         {
-            var pauseMenuLabel = game.add.text(0, startPosision+(i*100), labelsText[i], pixelsUpperBarfontStyle);
+            var pauseMenuLabel = game.add.text(0, startPosision+(i*85), labelsText[i], pixelsUpperBarfontStyle);
             pauseMenuLabel.setShadow(-2, 2, 'rgba(0,0,0,1)', 0);
             pauseMenuLabel.stroke = '#000000';
             pauseMenuLabel.padding.set(3, 3);
@@ -134,7 +134,7 @@ function createBuldingButton(x, y, fontStyle, parent, buildingEnum) {
                         mouseOverAnyMenu = false;
                         tempButton.strokeThickness = 0;
                 });
-        var newfontStyle = { font: "16px Arial", fill: "#ffffff", align: "left"};
+        var newfontStyle = { font: "16px "+globalFont, fill: "#ffffff", align: "left"};
         
         createLabel(0, (tempButton.height/2)+5, createResourcesText(buildingEnum), newfontStyle, tempButton);
         return tempButton;
@@ -142,7 +142,7 @@ function createBuldingButton(x, y, fontStyle, parent, buildingEnum) {
 
 function createPixelGroupButtons(parent, tartgetGroup) {
     var fontSize = 16;
-    var fontStyle = { font: fontSize+"px Arial", fill: "#ffffff", align: "left"};
+    var fontStyle = { font: fontSize+"px "+globalFont, fill: "#ffffff", align: "left"};
     
     var tempButton = game.add.text(PIXELGROUPBUTTONTYPE.REMOVE.moveX, parent.height, PIXELGROUPBUTTONTYPE.REMOVE.labelText , fontStyle);
                 parent.addChild(tempButton);
@@ -254,7 +254,7 @@ function fillMenu() {
                 var startY = 100;
                 var buttonInterScape = 100;
                 var upperBarFontSize = 30;
-                var fontStyle = { font: upperBarFontSize+"px Arial", fill: "#ffffff", align: "left"};
+                var fontStyle = { font: upperBarFontSize+"px "+globalFont, fill: "#ffffff", align: "left"};
                 var i = 0;
                 if(tech.unlock2Farms)
                 {
@@ -268,7 +268,7 @@ function fillMenu() {
                     var startY = 50;
                     var buttonInterScape = 90;
                     var upperBarFontSize = 25;
-                    var fontStyle = { font: upperBarFontSize+"px Arial", fill: "#ffffff", align: "left"};
+                    var fontStyle = { font: upperBarFontSize+"px "+globalFont, fill: "#ffffff", align: "left"};
                     var i = 0;
                     
                     createPixelsGroupLabel(30,startY+buttonInterScape*i,"Farmers: ", fontStyle, lowerBarMenu, farmersPixelsGroup);
@@ -294,7 +294,7 @@ function fillMenu() {
                     var startY = 50;
                     var buttonInterScape = 100;
                     var upperBarFontSize = 25;
-                    var fontStyle = { font: upperBarFontSize+"px Arial", fill: "#ffffff", align: "left"};
+                    var fontStyle = { font: upperBarFontSize+"px "+globalFont, fill: "#ffffff", align: "left"};
                     
                     createPixelsGroupLabel(30,startY+buttonInterScape*0,"Constructors: ", fontStyle, lowerBarMenu, constrPixelsGroup);
 
@@ -306,7 +306,7 @@ function fillMenu() {
             var startY = 75;
             var buttonInterScape = 75;
             var upperBarFontSize = 30;
-            var fontStyle = { font: upperBarFontSize+"px Arial", fill: "#ffffff", align: "left"};
+            var fontStyle = { font: upperBarFontSize+"px "+globalFont, fill: "#ffffff", align: "left"};
             var i=0;
                 createButton(30,startY+buttonInterScape*i, fontStyle, lowerBarMenu, MENU.STORAGE);
                 i++;
@@ -329,14 +329,14 @@ function fillMenu() {
                 var buttonInterScape = 110;
                 var upperBarFontSize = 30;
                 var descriptionLabelFontSize = 16;
-                var fontStyle = { font: descriptionLabelFontSize+"px Arial", fill: "#ffffff", 
+                var fontStyle = { font: descriptionLabelFontSize+"px "+globalFont, fill: "#ffffff", 
                     align: "center", boundsAlignH: "center", boundsAlignV: "bottom", 
                     wordWrap: true, wordWrapWidth: (lowerBarMenu.width-30) };
                     
                 var descriptionLabel = createLabel(15, lowerBarMenu.height-10, "", fontStyle, lowerBarMenu);
                 descriptionLabel.anchor.y = 1;
                     
-                fontStyle = { font: upperBarFontSize+"px Arial", fill: "#ffffff", align: "left"};
+                fontStyle = { font: upperBarFontSize+"px "+globalFont, fill: "#ffffff", align: "left"};
                 var i=0;
                 if(!tech.unlock1Constructors)
                 {
@@ -353,7 +353,7 @@ function fillMenu() {
                 var buttonInterScape = 110;
                 var upperBarFontSize = 28;
                     
-                fontStyle = { font: upperBarFontSize+"px Arial", fill: "#ffffff", align: "left"};
+                fontStyle = { font: upperBarFontSize+"px "+globalFont, fill: "#ffffff", align: "left"};
                 var i=0;
                 createButton(30,startY+buttonInterScape*i, fontStyle, lowerBarMenu, MENU.FARMING);
                 i++;
@@ -369,14 +369,14 @@ function fillMenu() {
                     var buttonInterScape = 110;
                     var upperBarFontSize = 30;
                     var descriptionLabelFontSize = 16;
-                        var fontStyle = { font: descriptionLabelFontSize+"px Arial", fill: "#ffffff", 
+                        var fontStyle = { font: descriptionLabelFontSize+"px "+globalFont, fill: "#ffffff", 
                             align: "center", boundsAlignH: "center", boundsAlignV: "bottom", 
                             wordWrap: true, wordWrapWidth: (lowerBarMenu.width-30) };
                             
                         var descriptionLabel = createLabel(15, lowerBarMenu.height-10, "", fontStyle, lowerBarMenu);
                         descriptionLabel.anchor.y = 1;
                         
-                        fontStyle = { font: upperBarFontSize+"px Arial", fill: "#ffffff", align: "left"};
+                        fontStyle = { font: upperBarFontSize+"px "+globalFont, fill: "#ffffff", align: "left"};
                         var i=0;
                         createBuldingButton(30,startY+buttonInterScape*i, fontStyle, lowerBarMenu, BUILDINGS.RES_FARMPATH); 
                         i++;
@@ -387,7 +387,7 @@ function fillMenu() {
                     var buttonInterScape = 110;
                     var upperBarFontSize = 30;
                     var descriptionLabelFontSize = 16;
-                        var fontStyle = { font: descriptionLabelFontSize+"px Arial", fill: "#ffffff", 
+                        var fontStyle = { font: descriptionLabelFontSize+"px "+globalFont, fill: "#ffffff", 
                             align: "center", boundsAlignH: "center", boundsAlignV: "bottom", 
                             wordWrap: true, wordWrapWidth: (lowerBarMenu.width-30) };
                             
@@ -395,7 +395,7 @@ function fillMenu() {
                         descriptionLabel.anchor.y = 1;
                         
                         
-                        fontStyle = { font: upperBarFontSize+"px Arial", fill: "#ffffff", align: "left"};
+                        fontStyle = { font: upperBarFontSize+"px "+globalFont, fill: "#ffffff", align: "left"};
                         var i=0;
                         
                         createBuldingButton(30,startY+buttonInterScape*i, fontStyle, lowerBarMenu, BUILDINGS.RES_TREE); 
@@ -407,7 +407,7 @@ function fillMenu() {
                     var buttonInterScape = 110;
                     var upperBarFontSize = 28;
                     var descriptionLabelFontSize = 16;
-                    var fontStyle = { font: descriptionLabelFontSize+"px Arial", fill: "#ffffff", 
+                    var fontStyle = { font: descriptionLabelFontSize+"px "+globalFont, fill: "#ffffff", 
                         align: "center",
                         boundsAlignH: "center", 
                         boundsAlignV: "bottom", 
@@ -417,7 +417,7 @@ function fillMenu() {
                     var descriptionLabel = createLabel(15, lowerBarMenu.height-10, "", fontStyle, lowerBarMenu);
                     descriptionLabel.anchor.y = 1;
                     
-                    fontStyle = { font: upperBarFontSize+"px Arial", fill: "#ffffff", align: "left"};
+                    fontStyle = { font: upperBarFontSize+"px "+globalFont, fill: "#ffffff", align: "left"};
                     
                     createBuldingButton(30,startY+buttonInterScape*0, fontStyle, lowerBarMenu, BUILDINGS.HOUS_BASIC);
             }
@@ -547,7 +547,7 @@ function updateLowerBar(create) {
     lowerBar.anchor.y = 1;
     var i=0;
     var upperBarFontSize = 24;
-    var fontStyle = { font: upperBarFontSize+"px Arial", fill: "#ffffff", align: "left", tabs: [ 250, 250, 250] };
+    var fontStyle = { font: upperBarFontSize+"px "+globalFont, fill: "#ffffff", align: "left", tabs: [ 250, 250, 250] };
     
         if(tech.unlock1Constructors)
         {
@@ -669,4 +669,126 @@ function writeLog(newLine, type){
     logLinesStack.shift();
     logLinesStack.push(getTimeString()+" "+newLine);
     drawLog();
+}
+
+var activePopupEnum = null;
+var popupBox;
+var popupBackground;
+
+function createPopup(PopUpEnum, enableAnimation, dontPauseGame) {
+    activePopupEnum = PopUpEnum;
+    dontPauseGame = dontPauseGame || false;
+    enableAnimation = enableAnimation || true;
+    game.lockByPopup = true;
+    
+    var popupShadow = game.add.graphics();
+    popupShadow.beginFill(0x000000, 0.7);
+    popupShadow.drawRect(0, 0, 1500, 2000);
+    popupShadow.endFill();
+    popupShadow.inputEnabled = true;
+    popupBackground = popupShadow;
+    
+    //T0D0 popupBox better graphic    
+    popupBox = game.add.sprite(w/2+game.camera.position.x, h/2+game.camera.position.y, 'logBox');
+    popupBox.anchor.setTo(0.5, 0.5);
+    popupBox.inputEnabled = true;
+    
+    var descriptionLabelFontSize = 25;
+    var fontStyle = { font: descriptionLabelFontSize+"px "+globalFont, fill: "#ffffff", 
+                        align: "center", boundsAlignH: "center", boundsAlignV: "center", 
+                        wordWrap: true, wordWrapWidth: (popupBox.width-40) };
+                    
+    var descriptionLabel = createLabel(0, (-popupBox.height/2)+5, PopUpEnum.text, fontStyle, popupBox);
+    descriptionLabel.anchor.setTo(0.5, 0);
+    
+    createPopUpButton(true, popupBox, popupShadow,PopUpEnum);
+    
+    createPopUpButton(false, popupBox, popupShadow,PopUpEnum);
+    
+    
+    if(enableAnimation)
+    {
+        if(game.paused == true) { game.paused = false; }
+        popupBox.scale.setTo(0,0);
+        var openTween = game.add.tween(popupBox.scale).to({x: 1, y: 1 }, 100, Phaser.Easing.Linear.None, true, 0, 0, false);
+        
+        openTween.onComplete.add(function() { if(!dontPauseGame) { game.paused = true; } }, this);
+    }
+    
+    return popupBox;
+}
+function createPopUpButton(type,parent,background,PopUpEnum) {
+    var swicher = -1;
+    if(type) swicher = 1;
+    
+    var buttonHeight = 40;
+    var buttonWidth  = 150; 
+    
+    var containerBackground = game.add.tileSprite( swicher*((parent.width/2)*0.5), ((parent.height/2)-buttonHeight/2)-10, buttonWidth, buttonHeight, 'buttonbackground');
+    parent.addChild(containerBackground);
+    containerBackground.anchor.setTo(0.5, 0.5);
+    containerBackground.inputEnabled = true;
+    
+    var tempButton = game.add.graphics();
+    tempButton.lineStyle(1, 0x000000, 1);
+    tempButton.drawRect(-buttonWidth/2, -buttonHeight/2, buttonWidth, buttonHeight);
+    containerBackground.addChild(tempButton);
+    tempButton.alpha = 0.5;
+    
+     var fontStyle = { font: "25px "+globalFont, fill: "#ffffff", 
+                        align: "center", boundsAlignH: "center", boundsAlignV: "center"};
+    
+    var text = "No";
+    if(type) text = "Yes";
+                    
+    var descriptionLabel = createLabel(0, 0, text, fontStyle, containerBackground);
+    descriptionLabel.anchor.setTo(0.5, 0.5);
+    
+    
+    containerBackground.events.onInputDown.add(function () {
+        if(game.input.activePointer.leftButton.isDown)
+        {
+            containerBackground.wasLeftClicked = true;  
+        }
+    });
+    
+    containerBackground.events.onInputUp.add(function () {
+        if(containerBackground.wasLeftClicked)
+        {
+           destroyPopup(parent, background);
+           postPopup(type,PopUpEnum);
+        }
+        containerBackground.wasLeftClicked = false;  
+        });
+        
+    containerBackground.events.onInputOver.add(function () {
+        tempButton.alpha = 1;
+    });
+    containerBackground.events.onInputOut.add(function () {
+        tempButton.alpha = 0.5;
+    });
+    
+    
+    return containerBackground;
+}
+function destroyPopup(parent, background) {
+    activePopupEnum = null;;
+    game.lockByPopup = false;
+    parent.destroy();
+    background.destroy();
+}
+
+function postPopup(type,PopUpEnum) {
+    switch(PopUpEnum)
+    {
+        case POPUPS.OVERRIDE:
+            if(type) //yes
+            {
+                game.paused = false;
+                saveGame(choosenSaveslot);
+                game.paused = true; 
+                mainMenu.hideMenuWindow();
+            }
+        break;
+    }
 }

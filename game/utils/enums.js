@@ -1,3 +1,6 @@
+var globalFont = 'Lato';
+var gameVersion = 'Pixel Civilization 0.5 Alpha';
+
 var MENU = {
         PIXELS                  : {menuId: 1,  text: "Pixels"},
                 WORKERPIXELS    : {menuId: 10, text: "Workers pixels"},
@@ -45,7 +48,13 @@ var MAINMENUBUTTONS = {
 var MAINMENUWINDOWS = {
         LOAD                    : {id: 0, title: "Select save slot" },
         DELETE                  : {id: 1, title: "Delete game: " },
-        NEWGAMESELECTSLOT       : {id: 2, title: "Select save slot" }
+        NEWGAMESELECTSLOT       : {id: 2, title: "Select save slot" },
+        SAVE                    : {id: 3, title: "Select save slot" }
+        
+};
+
+var POPUPS = {
+        OVERRIDE                : {id: 0, text: "This will override your save.\nAre you sure to proceed?"}
         
 };
 
