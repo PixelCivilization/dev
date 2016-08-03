@@ -31,7 +31,7 @@ var mainMenuState = {
         
     },
     render: function(){
-        game.debug.text("Pixel Civilization 0.3 FPS: " + game.time.fps || '--' , 30, 970);
+        game.debug.text(gameVersion+" FPS: " + game.time.fps || '--' , 30, 970);
     }
     
 };
@@ -39,6 +39,7 @@ var mainMenuState = {
 var mainMenu = {
     x:1,
     y:1,
+    isWindowOpened: false,
     
     getLastSave: function() {
         var newestSave = 
@@ -109,7 +110,7 @@ var mainMenu = {
         var startY = 500-300;
         var buttonInterScape = 200;
         var upperBarFontSize = 40;
-        var fontStyle = { font: upperBarFontSize+"px Arial", fill: "#ffffff", align: "left"};
+        var fontStyle = { font: upperBarFontSize+"px "+globalFont, fill: "#ffffff", align: "left"};
         var i = 0;
         
         this.createMainButton(500, startY+buttonInterScape*i, fontStyle, null, MAINMENUBUTTONS.CONTINUE);
@@ -143,7 +144,7 @@ var mainMenu = {
             tempButton.y = 0;
             
             var lastSave = this.getLastSave();
-            var labelFontStyle = { font: "18px Arial", fill: "#ffffff", align: "left"};
+            var labelFontStyle = { font: "18px "+globalFont, fill: "#ffffff", align: "left"};
             var textString;
             
             if(lastSave != null)
@@ -226,17 +227,17 @@ var mainMenu = {
     },
     
     showMenuWindow: function (gametype) {
-        
+        this.isWindowOpened = true;
         menuFilter.beginFill(0x000000, 0.8);
         menuFilter.drawRect(0, 0, 1000, 1000);
         menuFilter.endFill();
         
-        menuWindow = game.add.sprite(w/2, h/2, 'mainMenuWindowBox');
+        menuWindow = game.add.sprite(w/2+game.camera.position.x, h/2+game.camera.position.y, 'mainMenuWindowBox');
         menuWindow.anchor.setTo(0.5, 0.5);
         menuWindow.alpha = 0.8;
         menuWindow.inputEnabled = true;
         
-        var labelFontStyle = { font: "50px Arial", fill: "#ffffff", align: "left"};
+        var labelFontStyle = { font: "50px "+globalFont, fill: "#ffffff", align: "left"};
 
         var titleLabel = game.add.text(0, (-menuWindow.height/2) + 50 , gametype.title , labelFontStyle);
         menuWindow.addChild(titleLabel);
@@ -267,6 +268,7 @@ var mainMenu = {
         } 
     },
     hideMenuWindow: function () {
+        this.isWindowOpened = false;
         menuWindow.destroy();
         menuFilter.clear();
     },
@@ -284,7 +286,7 @@ var mainMenu = {
     },
     createSaveSlotButton: function(windowType, i){
       
-        var labelFontStyle = { font: "40px Arial", fill: "#ffffff", align: "left"}; 
+        var labelFontStyle = { font: "40px "+globalFont, fill: "#ffffff", align: "left"}; 
       
         var aviableToLoad = false;
         var aviableToStartNewGame = false;
@@ -324,6 +326,11 @@ var mainMenu = {
                 containerBackground.alpha = 0.8;
                 containerBackground.inputEnabled = true;
                 
+                if(windowType == MAINMENUWINDOWS.NEWGAMESELECTSLOT)
+                {
+                    containerBackground.y -= 90;    
+                }
+                
                 var contenerBorder = game.add.graphics();
                 containerBackground.addChild(contenerBorder);
                 contenerBorder.lineStyle(2, 0xffffff, 1);
@@ -356,18 +363,18 @@ var mainMenu = {
                 });
                 
                 containerBackground.events.onInputUp.add(function () {
-                    if(containerBackground.wasLeftClicked)
+                    if(containerBackground.wasLeftClicked && !game.lockByPopup)
                     {
                         if(windowType == MAINMENUWINDOWS.NEWGAMESELECTSLOT)
                         {
                             if(aviableToStartNewGame)
                             {
-                                //empty slot -> proced
+                                //empty slot -> proced ?
                                 mainMenu.startGame(keys[i], GAMETYPE.NEW);
                             }
                             else
                             {
-                                //some slot -> overide pop up
+                                createPopup(POPUPS.OVERRIDE, true, true);
                             }
                         } 
                         else
@@ -416,18 +423,20 @@ var mainMenu = {
     },
     
     startGame: function(saveSlot, gametype) {
+        if(this.isWindowOpened) { this.hideMenuWindow(); }
         saveKey = saveSlot;
         lunchGameType = gametype;
         game.state.start('mainState');
     },
     
     onDownFunction: function(pointer) {
-        if(pointer.rightButton.isDown)
+        if(!game.lockByPopup)
         {
-            mainMenu.hideMenuWindow();
+            if(pointer.rightButton.isDown)
+            {
+                mainMenu.hideMenuWindow();
+            }
         }
     }
-    
-    
 };
 

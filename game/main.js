@@ -247,7 +247,7 @@ function create() {
         groupMenuBarsAndBoxes = game.add.group();
         {
              var upperBarFontSize = 24;
-             var fontStyle = { font: upperBarFontSize+"px Arial", fill: "#ffffff", align: "left", tabs: [ 250, 250, 250] };
+             var fontStyle = { font: upperBarFontSize+"px "+globalFont, fill: "#ffffff", align: "left", tabs: [ 250, 250, 250] };
         
             upperBar = groupMenuBarsAndBoxes.create(0, 0, 'upperBar');
                 var labelResources = game.add.text(15, ((upperBar.height - upperBarFontSize)/2) , " ", fontStyle);
@@ -257,7 +257,7 @@ function create() {
         }
         {
             var pixelsUpperBarFontSize = 16;
-            var pixelsUpperBarfontStyle = { font: pixelsUpperBarFontSize+"px Arial", fill: "#ffffff", align: "left", tabs: [ 120, 150, 10] };
+            var pixelsUpperBarfontStyle = { font: pixelsUpperBarFontSize+"px "+globalFont, fill: "#ffffff", align: "left", tabs: [ 120, 150, 10] };
             
             pixelsUpperBar = groupMenuBarsAndBoxes.create(0, upperBar.height, 'pixelsUpperBar');
                 var pixelsUpperBarLabel = game.add.text(15, ((pixelsUpperBar.height - pixelsUpperBarFontSize)/2)-1 , " ", pixelsUpperBarfontStyle);
@@ -345,18 +345,18 @@ function onDownFunction(pointer) {
     {
         if(pointer.rightButton.isDown)
         {
-            hidePauseMenu();
-        }
-        else
-        {
-            if(lowerBar.getChildAt(lowerBar.children.length-1).getBounds().contains(game.input.x, game.input.y))
+            if(!mainMenu.isWindowOpened)
             {
                 hidePauseMenu();
             }
-            else
+            else 
             {
-                pauseLogic.onDownFunction();
+                mainMenu.hideMenuWindow();
             }
+        }
+        else
+        {
+            pauseLogic.onDownFunction();
         }
     }
     else 
@@ -598,16 +598,54 @@ var load = {
 
 
 var pauseLogic = {
+    
     update: function() {
-        for(var i=0; i<pauseMenu.children.length; i++)
+        if(!game.lockByPopup)
         {
-            if(this.isPointerOver(pauseMenu.getChildAt(i)))
+            if(!mainMenu.isWindowOpened)
             {
-               pauseMenu.getChildAt(i).strokeThickness = 4; 
+                for(var i=0; i<pauseMenu.children.length; i++)
+                {
+                    if(this.isPointerOver(pauseMenu.getChildAt(i)))
+                    {
+                       pauseMenu.getChildAt(i).strokeThickness = 4; 
+                    }
+                    else
+                    {
+                        pauseMenu.getChildAt(i).strokeThickness = 0; 
+                    }
+                }
             }
             else
             {
-                pauseMenu.getChildAt(i).strokeThickness = 0; 
+                for(var i=1; i<menuWindow.children.length; i++)
+                {
+                    if(this.isPointerOver(menuWindow.getChildAt(i)))
+                    {
+                       menuWindow.getChildAt(i).alpha = 1; 
+                    }
+                    else
+                    {
+                        menuWindow.getChildAt(i).alpha = 0.8;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if(popupBox != null)
+            {
+                for(var i=1; i<3; i++)
+                {
+                    if(this.isPointerOver(popupBox.getChildAt(i)))
+                    {
+                        popupBox.getChildAt(i).getChildAt(0).alpha = 1;
+                    }
+                    else
+                    {
+                        popupBox.getChildAt(i).getChildAt(0).alpha = 0.5;
+                    }
+                }
             }
         }
     },
@@ -625,37 +663,86 @@ var pauseLogic = {
         return false;
     },    
     onDownFunction: function() {
-        for(var i=0; i<pauseMenu.children.length; i++)
+        if(!game.lockByPopup)
         {
-            if(this.isPointerOver(pauseMenu.getChildAt(i)))
+            if(!mainMenu.isWindowOpened)
             {
-                switch(i)
+                for(var i=0; i<pauseMenu.children.length; i++)
                 {
-                    case 0:
-                        //renderWindow?
-                        mainMenu.showMenuWindow(MAINMENUWINDOWS.LOAD);
-                        
-                        /*
-                        game.paused = false;
-                        saveGame(saveKey);
-                        game.paused = true; 
-                        */
-                    break;
-                    
-                    case 1:
-                        game.paused = false;
-                        game.state.start('mainMenu');
-                    break;
-                    
-                    case 2:
-                        game.paused = false;
-                        game.scale.refresh();
-                        game.scale.startFullScreen();
-                        game.paused = true;    
-                    break;
+                    if(this.isPointerOver(pauseMenu.getChildAt(i)))
+                    {
+                        switch(i)
+                        {
+                            case 0:
+                                hidePauseMenu();    
+                            break;
+                            
+                            case 1:
+                                mainMenu.showMenuWindow(MAINMENUWINDOWS.NEWGAMESELECTSLOT);
+                            break;
+                            
+                            case 2:
+                                game.paused = false;
+                                game.state.start('mainMenu');
+                            break;
+                            
+                            case 3:
+                                game.paused = false;
+                                game.scale.refresh();
+                                game.scale.startFullScreen();
+                                game.paused = true;    
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                for(var i=1; i<menuWindow.children.length; i++)
+                {
+                    if(this.isPointerOver(menuWindow.getChildAt(i)))
+                    {
+                        if(menuWindow.getChildAt(i).getChildAt(1).getChildAt(0).text == "[Empty slot]")
+                        {
+                            game.paused = false;
+                            saveGame(menuWindow.getChildAt(i).getChildAt(1).text);
+                            game.paused = true; 
+                            mainMenu.hideMenuWindow();
+                        }
+                        else
+                        {
+                            createPopup(POPUPS.OVERRIDE, true);
+                            choosenSaveslot = menuWindow.getChildAt(i).getChildAt(1).text;
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            if(popupBox != null)
+            {
+                for(var i=1; i<3; i++)
+                {
+                    if(this.isPointerOver(popupBox.getChildAt(i)))
+                    {
+                        var type;
+                        if(i==1)
+                        {
+                            type = true;
+                        }
+                        if(i==2)
+                        {
+                            type = false;
+                        }
+                        postPopup(type,activePopupEnum);
+                        destroyPopup(popupBox, popupBackground);
+                        break;
+                    }
                 }
             }
         }
     }
 };
 
+var choosenSaveslot;
